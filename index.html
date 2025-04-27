@@ -118,15 +118,22 @@
             <p>For more about the characters, <a href="Characters/Suho.html">click here</a>.</p>
         </section>
         <section class="comments">
-            <h2>Leave a Comment</h2>
-            <form id="commentForm" onsubmit="submitComment(event)">
-              <textarea id="commentText" placeholder="Write your comment..." required></textarea><br>
-              <button type="submit">Submit</button>
+            <form>
+                <label for="newComment">Add a new comment:</label>
+                <p></p>
+                <input type="text" id="newComment" class="new-comment" placeholder="New comment" />
+                <button type="submit" class="add-comment" id="addNewComment">
+                    <i class="fas fa-plus"></i>
+                    <span>+ Add</span>
+                </button>
+        
+                <div class="Comments">
+                    <p>Comments</p>
+                    <ul class="comment-list" id="commentList"></ul>
+                </div>
             </form>
-            
-            <h3>Comments:</h3>
-            <div id="commentSection"></div>
-          </section>
+        </section>
+        
     </div>
 </body>
 
