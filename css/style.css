@@ -34,6 +34,14 @@ body, html {
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);   
 }
+.comments {
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);   
+}
 
 body {
     background: linear-gradient(to left, #0000ff, #8000ff);
