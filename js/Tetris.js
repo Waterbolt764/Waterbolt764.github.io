@@ -1,5 +1,5 @@
-const GRID_ROWS = 6;
-    const GRID_COLS = 6;
+const GRID_ROWS = 9;
+    const GRID_COLS = 9;
     const CANVAS_WIDTH = 240;
     const CANVAS_HEIGHT = 400;
 
