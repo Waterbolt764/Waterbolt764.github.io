@@ -186,6 +186,26 @@ function getNextMove(snakeBody, allBodies) {
   return null;
 }
 
+function resetGame() {
+  obstacles = spawnObstacles(Math.floor(Math.random() * 10) + 5);
+  speed = initialSpeed;
+  foods = spawnFood(10);
+
+  snakes = [
+    "lime", "cyan", "magenta", "yellow", "orange", "purple", "blue", "red", "green", "pink", "brown", "white"
+  ].map(color => ({
+    color,
+    body: [{
+      x: Math.floor(Math.random() * rows) * box,
+      y: Math.floor(Math.random() * rows) * box,
+    }],
+    alive: true,
+    score: 0
+  }));
+
+  restartGameLoop();
+}
+
 function showResults(winner) {
   let message = "";
   if (winner) {
@@ -200,7 +220,10 @@ function showResults(winner) {
   }
 
   alert(message);
+
+  setTimeout(resetGame, 1000); // wait 1 second before restarting
 }
+
 
 function restartGameLoop() {
   clearInterval(game);
