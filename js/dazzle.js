@@ -1,4 +1,12 @@
-const symbols = ["💎", "🍒", "🔔", "7️⃣", "🍋", "⭐"];
+const weightedSymbols = [
+  "💎", "💎",
+  "🍒", "🍒", "🍒", "🍒", "🍒", "🍒",
+  "🔔", "🔔", "🔔", "🔔",
+  "7️⃣",
+  "🍋", "🍋", "🍋", "🍋", "🍋",
+  "⭐"
+];
+
 const grid = document.getElementById("grid");
 let balance = 10;
 
@@ -20,25 +28,31 @@ function normalizeSymbol(sym) {
 }
 
 function spin() {
-  if (balance < 1) {
+  const powerPlay = document.getElementById("powerPlay").checked;
+  const spinCost = powerPlay ? 1 : 0.5;
+
+  if (balance < spinCost) {
     setMessage("💸 Not enough funds!");
     return;
   }
 
-  const powerPlay = document.getElementById("powerPlay").checked;
   const cells = document.querySelectorAll(".cell");
   let result = [];
 
   for (let i = 0; i < 9; i++) {
-    let sym = symbols[Math.floor(Math.random() * symbols.length)];
-    if (powerPlay && sym === "💎") sym = "⭐"; // Power Play effect
+    let sym = weightedSymbols[Math.floor(Math.random() * weightedSymbols.length)];
+    if (powerPlay && sym === "💎") sym = "⭐"; // PowerPlay turns diamonds into wild stars
     result.push(sym);
     cells[i].textContent = sym;
   }
 
-  balance -= 1; // cost per spin
+  balance -= spinCost;
 
   let win = checkWin(result);
+
+  if (powerPlay) {
+    win *= 1.5; // PowerPlay pays 1.5x more
+  }
 
   balance += win;
 
@@ -48,10 +62,15 @@ function spin() {
 
 function checkWin(result) {
   const winLines = [
-    [3, 4, 5], // middle row
-    [0, 4, 8], // diagonal TL-BR
-    [2, 4, 6]  // diagonal TR-BL
+    [0, 1, 2], // Top row
+    [3, 4, 5], // Middle row
+    [6, 7, 8], // Bottom row
+    [0, 4, 8], // Diagonal TL-BR
+    [2, 4, 6]  // Diagonal TR-BL
   ];
+
+  let totalWin = 0;
+  let winningSymbols = [];
 
   for (let line of winLines) {
     const [i, j, k] = line;
@@ -64,22 +83,30 @@ function checkWin(result) {
       normalizeSymbol(b) === normalizeSymbol(c)
     ) {
       const winAmount = getWinAmount(a);
-      setMessage(`🎉 3 ${a}s! You win £${winAmount.toFixed(2)}`);
-      return winAmount;
+      if (winAmount > 0) {
+        totalWin += winAmount;
+        winningSymbols.push(a);
+      }
     }
   }
 
-  setMessage("No win – try again!");
-  return 0;
+  if (totalWin > 0) {
+    const uniqueSymbols = [...new Set(winningSymbols)].join(", ");
+    setMessage(`🎉 You won £${totalWin.toFixed(2)} on ${winningSymbols.length} line(s)! Symbols: ${uniqueSymbols}`);
+  } else {
+    setMessage("No win – try again!");
+  }
+
+  return totalWin;
 }
 
 function getWinAmount(symbol) {
   switch (symbol) {
-    case "⭐": return 5;
-    case "💎": return 4;
-    case "7️⃣": return 3;
-    case "🔔": return 2;
-    case "🍒": return 1.5;
+    case "⭐": return 10;
+    case "💎": return 7;
+    case "7️⃣": return 5;
+    case "🔔": return 3;
+    case "🍒": return 2;
     case "🍋": return 1;
     default: return 0;
   }
